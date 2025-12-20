@@ -5,6 +5,18 @@ usage() {
   exit 1
 }
 
+workspace() {
+  echo "workspace logic"
+}
+
+project() {
+  echo "project logic"
+}
+
+tool() {
+  echo "tool logic"
+}
+
 if [[ $@ < 4 ]]; then
   echo "Insufficient arguments provided!"
   usage
@@ -27,10 +39,38 @@ case "$COMMAND" in
   workspace|init)
     if [[ "$COMMAND" -eq "init" ]]; then
       NAME="$SUBCOMMAND"
+      workspace
     elif [[ "$SUBCOMMAND" -eq "create" ]]; then
       NAME="$1"
+      shift
+      workspace
     fi
 
+  project|new)
+    if [[ "$COMMAND" -eq "new" ]]; then
+      NAME="$SUBCOMMAND"
+      project
+    elif [[ "$COMMAND" -eq "create" ]]; then
+      NAME="$1"
+      shift
+      project
+    fi
+    ;;
+
+  tool|add)
+    if [[ "$COMMAND" -eq "add" ]]; then
+      NAME="$SUBCOMMAND"
+      tool
+    elif [[ "$COMMAND" -eq "tool" ]]; then
+      NAME="$1"
+      shift
+      tool
+    fi
+    ;;
+
+  *)
+    usage
+    exit 1
 ENTITY="$1"
 
 if [[ -n "$ENTITY" ]]; then shift; fi 
