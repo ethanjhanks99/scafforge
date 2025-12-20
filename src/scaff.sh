@@ -21,75 +21,121 @@ rm_tool() {
   echo "remove tool logic"
 }
 
+list_tool() {
+  echo "list tool logic"
+}
+
 COMMAND="$1"
 
 if [[ -n "$COMMAND" ]]; then shift; fi
 
 SUBCOMMAND="$1"
 
-if [[ -n "$SUBCOMMAND" ]] then shift; fi 
+if [[ -n "$SUBCOMMAND" ]]; then shift; fi 
 
 case "$COMMAND" in 
   -h|--help)
-    usage()
+    usage
     exit 0
     ;;
   workspace|init)
     if [[ "$COMMAND" == "init" ]]; then
       NAME="$SUBCOMMAND"
+      if [[ -z "$NAME" ]]; then
+        echo "Error: 'init' requires a workspace name."
+        exit 1
+      fi
       workspace
-    elif [[ "$SUBCOMMAND" == "create" ]]; then
-      NAME="$1"
-      shift
-      workspace
+    elif [[ "$COMMAND" == "workspace" ]]
+      if [[ "$SUBCOMMAND" == "create" ]]; then
+        NAME="$1"
+        if [[ -z "$NAME" ]]; then
+          echo "Error: 'create' requires a workspace name."
+          exit 1
+        fi
+        shift
+        workspace
+      else
+        echo "Error: unrecognized subcommand: $SUBCOMMAND"
+        exit 1
+      fi
     fi
     ;;
 
   project|new)
     if [[ "$COMMAND" == "new" ]]; then
       NAME="$SUBCOMMAND"
+      if [[ -z "$NAME" ]]; then
+        echo "Error: 'new' requeres a project name."
+        exit 1
+      fi
       project
-    elif [[ "$SUBCOMMAND" == "create" ]]; then
-      NAME="$1"
-      shift
-      project
-    fi
-    ;;
-
-  tool|add)
-    if [[ "$COMMAND" == "add" ]]; then
-      NAME="$SUBCOMMAND"
-      add_tool
-    elif [[ "$COMMAND" == "tool" ]]; then
-      if [[ "$SUBCOMMAND" == "add" ]]; then
-        
+    elif [[ "$COMMAND" == "project" ]]
+      if [[ "$SUBCOMMAND" == "create" ]]; then
         NAME="$1"
-        if [[ -n "$NAME" ]]; then 
-          shift 
-        else
-          usage
+        if [[ -z "$NAME" ]]; then
+          echo "Error: 'new' requeres a project name."
           exit 1
-        fi        
-
-        add_tool
-      elif [[ "$SUBCOMMAND" == "rm" ]]; then
-        NAME="$1"
-        
-        if [[ -n "$NAME" ]]; then 
-          shift 
-        else
-          usage
-          exit 1
-        fi        
-
-        rm_tool
+        fi
+        shift
+        project
+      else
+        echo "Error: unrecognized subcommand: $SUBCOMMAND"
+        exit 1
       fi
     fi
     ;;
 
+  tool|add|rm)
+    if [[ "$COMMAND" == "add" ]]; then
+      NAME="$SUBCOMMAND"
+
+      if [[ -z "$NAME" ]]; then
+        echo "Error: 'add' requires a tool name."
+        exit 1
+      fi
+      add_tool
+    elif [[ "$COMMAND" == "rm" ]]; then
+      NAME="$SUBCOMMAND"
+      if [[ -z "$NAME" ]]; then
+        echo "Error: 'rm' requires a tool name."
+        exit 1
+      fi
+      rm_tool
+    elif [[ "$COMMAND" == "tool" ]]; then
+      if [[ "$SUBCOMMAND" == "add" ]]; then
+        
+        NAME="$1"
+        if [[ -z "$NAME" ]]; then 
+          echo "Error: 'add' requires a tool name"
+          exit 1
+        fi        
+        shift
+        add_tool
+      elif [[ "$SUBCOMMAND" == "rm" ]]; then
+        NAME="$1"
+        
+        if [[ -z "$NAME" ]]; then 
+          echo "Error: 'rm' requires a tool name"
+          exit 1
+        fi        
+        shift
+        rm_tool
+      elif [[ "$SUBCOMMAND" == "list" ]]; then
+        list_tool
+      fi
+    else
+      echo "Error: unrecognized subcommand: $SUBCOMMAND"
+      exit 1
+    fi
+    ;;
+
   *)
+    echo "Error: unrecognized command: $COMMAND"
     usage
     exit 1
+esac
+
 ENTITY="$1"
 
 if [[ -n "$ENTITY" ]]; then shift; fi 
