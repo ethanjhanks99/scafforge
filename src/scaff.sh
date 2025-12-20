@@ -11,10 +11,39 @@ if [[ $@ < 4 ]]; then
   exit 1
 fi
 
-action=$1
-entity_type=$2
-name=$3
+COMMAND="$1"
 
-echo "action: $action"
-echo "entity-type: $entity_type"
-echo "name: $name"
+if [[ -n "$COMMAND" ]]; then shift; fi
+
+SUBCOMMAND="$1"
+
+if [[ -n "$SUBCOMMAND" ]] then shift; fi 
+
+case "$COMMAND" in 
+  -h|--help)
+    usage()
+    exit 0
+    ;;
+  workspace|init)
+    if [[ "$COMMAND" -eq "init" ]]; then
+      NAME="$SUBCOMMAND"
+    elif [[ "$SUBCOMMAND" -eq "create" ]]; then
+      NAME="$1"
+    fi
+
+ENTITY="$1"
+
+if [[ -n "$ENTITY" ]]; then shift; fi 
+
+NAME="$1"
+
+if [[ -n "$NAME" ]]; then shift; fi 
+
+
+while [[ $# -gt 0 ]]; do
+  case "$1" in 
+
+    -t|--type)
+
+done
+
