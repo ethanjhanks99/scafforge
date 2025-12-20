@@ -13,15 +13,13 @@ project() {
   echo "project logic"
 }
 
-tool() {
-  echo "tool logic"
+add_tool() {
+  echo "add tool logic"
 }
 
-if [[ $@ < 4 ]]; then
-  echo "Insufficient arguments provided!"
-  usage
-  exit 1
-fi
+rm_tool() {
+  echo "remove tool logic"
+}
 
 COMMAND="$1"
 
@@ -37,20 +35,21 @@ case "$COMMAND" in
     exit 0
     ;;
   workspace|init)
-    if [[ "$COMMAND" -eq "init" ]]; then
+    if [[ "$COMMAND" == "init" ]]; then
       NAME="$SUBCOMMAND"
       workspace
-    elif [[ "$SUBCOMMAND" -eq "create" ]]; then
+    elif [[ "$SUBCOMMAND" == "create" ]]; then
       NAME="$1"
       shift
       workspace
     fi
+    ;;
 
   project|new)
-    if [[ "$COMMAND" -eq "new" ]]; then
+    if [[ "$COMMAND" == "new" ]]; then
       NAME="$SUBCOMMAND"
       project
-    elif [[ "$COMMAND" -eq "create" ]]; then
+    elif [[ "$SUBCOMMAND" == "create" ]]; then
       NAME="$1"
       shift
       project
@@ -58,13 +57,33 @@ case "$COMMAND" in
     ;;
 
   tool|add)
-    if [[ "$COMMAND" -eq "add" ]]; then
+    if [[ "$COMMAND" == "add" ]]; then
       NAME="$SUBCOMMAND"
-      tool
-    elif [[ "$COMMAND" -eq "tool" ]]; then
-      NAME="$1"
-      shift
-      tool
+      add_tool
+    elif [[ "$COMMAND" == "tool" ]]; then
+      if [[ "$SUBCOMMAND" == "add" ]]; then
+        
+        NAME="$1"
+        if [[ -n "$NAME" ]]; then 
+          shift 
+        else
+          usage
+          exit 1
+        fi        
+
+        add_tool
+      elif [[ "$SUBCOMMAND" == "rm" ]]; then
+        NAME="$1"
+        
+        if [[ -n "$NAME" ]]; then 
+          shift 
+        else
+          usage
+          exit 1
+        fi        
+
+        rm_tool
+      fi
     fi
     ;;
 
