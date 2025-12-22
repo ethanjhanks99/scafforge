@@ -47,6 +47,7 @@ workspace | init)
     NAME="$SUBCOMMAND"
     if [[ -z "$NAME" ]]; then
       echo "Error: 'init' requires a workspace name."
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
     workspace
@@ -55,12 +56,14 @@ workspace | init)
       NAME="$1"
       if [[ -z "$NAME" ]]; then
         echo "Error: 'create' requires a workspace name."
+        echo "If you need help, run 'forge [-h|--help]"
         exit 1
       fi
       shift
       workspace
     else
       echo "Error: unrecognized subcommand: $SUBCOMMAND"
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
   fi
@@ -70,6 +73,7 @@ project | new)
     NAME="$SUBCOMMAND"
     if [[ -z "$NAME" ]]; then
       echo "Error: 'new' requeres a project name."
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
     project
@@ -78,12 +82,14 @@ project | new)
       NAME="$1"
       if [[ -z "$NAME" ]]; then
         echo "Error: 'new' requeres a project name."
+        echo "If you need help, run 'forge [-h|--help]"
         exit 1
       fi
       shift
       project
     else
       echo "Error: unrecognized subcommand: $SUBCOMMAND"
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
   fi
@@ -94,6 +100,7 @@ tool | add | rm)
 
     if [[ -z "$NAME" ]]; then
       echo "Error: 'add' requires a tool name."
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
     add_tool
@@ -101,6 +108,7 @@ tool | add | rm)
     NAME="$SUBCOMMAND"
     if [[ -z "$NAME" ]]; then
       echo "Error: 'rm' requires a tool name."
+      echo "If you need help, run 'forge [-h|--help]"
       exit 1
     fi
     rm_tool
@@ -110,6 +118,7 @@ tool | add | rm)
       NAME="$1"
       if [[ -z "$NAME" ]]; then
         echo "Error: 'add' requires a tool name"
+        echo "If you need help, run 'forge [-h|--help]"
         exit 1
       fi
       shift
@@ -119,6 +128,7 @@ tool | add | rm)
 
       if [[ -z "$NAME" ]]; then
         echo "Error: 'rm' requires a tool name"
+        echo "If you need help, run 'forge [-h|--help]"
         exit 1
       fi
       shift
@@ -128,6 +138,7 @@ tool | add | rm)
     fi
   else
     echo "Error: unrecognized subcommand: $SUBCOMMAND"
+    echo "If you need help, run 'forge [-h|--help]"
     exit 1
   fi
   ;;
@@ -137,3 +148,20 @@ tool | add | rm)
   exit 1
   ;;
 esac
+
+while [[ $# > 0 ]]; do
+  case "$1" in 
+    -t|--type)
+      if [[ -n "$2" && "$2" != -* ]]; then
+        PROJECT_TYPE="$2"
+        shift 2
+      else
+        echo "Error: --type requires an argument"
+        exit 1
+      fi
+      ;;
+    --type=*)
+      PROJECT_TYPE="${1#*=}"
+      shift 1
+done
+
