@@ -49,6 +49,14 @@ workspace_create() {
     return 1
   fi
   
+  # Check for help flag early
+  for arg in "$@"; do
+    if [[ "$arg" == "-h" ]] || [[ "$arg" == "--help" ]]; then
+      workspace_help
+      return 0
+    fi
+  done
+  
   # Validate workspace name
   if ! validate_name "$ws_name"; then
     return 1

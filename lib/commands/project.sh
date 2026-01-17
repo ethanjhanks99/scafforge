@@ -49,6 +49,14 @@ project_create() {
     return 1
   fi
   
+  # Check for help flag early
+  for arg in "$@"; do
+    if [[ "$arg" == "-h" ]] || [[ "$arg" == "--help" ]]; then
+      project_help
+      return 0
+    fi
+  done
+  
   # Validate project name
   if ! validate_name "$proj_name"; then
     return 1
